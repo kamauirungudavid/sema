@@ -25,7 +25,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-st.set_page_config(page_title="🚗 VEHICLE PARTICULARS FORM", page_icon="🌟", layout="wide")
+st.set_page_config(page_title="SEMA NATURALS", page_icon="🌟", layout="wide")
 local_css("style.css")
 
 col_logo, col_title = st.columns([1,4])
@@ -34,12 +34,10 @@ col_logo, col_title = st.columns([1,4])
 
 # Define your pages. Use the path to your page files.
 pages = [
+    st.Page("pages/dashbaoard.py", title="DASHBOARD", icon="📊"),
     st.Page("pages/sales.py", title="SALES", icon="📋"),
-    st.Page("pages/manufacturing.py", title="MANUFACTURING", icon="📌"),
-    st.Page("pages/dashbaoard.py", title="DASHBOARD", icon="🙋‍♂️"),
-    
-   
-    # st.Page("pages/treasury.py", title="Treasury", icon="💰"),
+    st.Page("pages/manufacturing.py", title="MANUFACTURING", icon="🏭"),
+    st.Page("pages/products.py", title="PRODUCT_LIST", icon="🛍️"),
     # st.Page("pages/reinsurance.py", title="REO", icon="⚖"),
     # st.Page("pages/business_partnering.py", title="Finance Business Partnering", icon="🤝"),
 ]

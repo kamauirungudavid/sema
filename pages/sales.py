@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime as dt
+import json
+import math
+from google.cloud import bigquery
 
 # --- Defaults for cleared state ---
 DEFAULTS = {
@@ -10,13 +13,15 @@ DEFAULTS = {
     "delivery_mode": "",
     "product_name": "Select...",
     "quantity": "",
-    "price_amount": 10,
     "pickup_status": "PENDING",
     "payment_mode": "Select...",
     "invoice_number": "",
     "delivery_destination": "",
     "sales_date": dt.now().date(),
 }
+
+with open('data/config_files/product_config.json',  "r") as f:
+    product_list = json.load(f)
 
 # Ensure session state keys exist (so UI can read them)
 for k, v in DEFAULTS.items():
@@ -58,14 +63,19 @@ with st.form("sales_form"):
         )
 
     with col2:
-        product_name_options = ["Select...", "Collagen", "SupperFood", "Vitamin C"]
+        product_name_options = ["Select...."] + list(product_list.keys())
+        # Set default index
+        default_index = 0  # "Select...." is the first option
+        if "product_name" in st.session_state and st.session_state["product_name"] in product_name_options:
+            default_index = product_name_options.index(st.session_state["product_name"])
+
         product_name = st.selectbox(
             "Product Name",
             product_name_options,
-            index=product_name_options.index(st.session_state["product_name"])
-            if st.session_state["product_name"] in product_name_options else 0,
+            index=default_index,
             key="product_name"
         )
+
 
         quantity = st.text_input(
             "Purchase Quantity (Units)",
@@ -74,14 +84,29 @@ with st.form("sales_form"):
             key="quantity"
         )
 
+
+        retail_price = 1
+        wholesale_price = 1
+
+        # Only lookup if a real product is selected
+        if product_name in product_list:
+            prices = product_list[product_name][0]
+            retail_price = prices[0] if not math.isnan(prices[0]) else 1
+            wholesale_price = prices[1] if not math.isnan(prices[1]) else 1
+
+        if "price_amount" not in st.session_state:
+            st.session_state["price_amount"] = int(retail_price)
+        elif product_name != "Select....":
+            # Auto-update number_input whenever a new product is selected
+            st.session_state["price_amount"] = int(retail_price)
+
+        # Number input (auto-filled)
         price_amount = st.number_input(
             "Price Amount (Ksh)",
             min_value=1,
-            step=1,
-            value=st.session_state["price_amount"],
+            step=10,
             key="price_amount"
         )
-
         pickup_status = st.selectbox(
             "Pickup Status",
             ["PENDING", "PICKED UP", "DELIVERED"],
