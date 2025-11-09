@@ -1,0 +1,91 @@
+/* style.css */
+
+/* Whole page background */
+.main, .stApp {
+    background-color: #f4f6f9;  /* soft gray background */
+    padding: 20px;
+    font-family: "Segoe UI", "Arial", sans-serif;
+    color: #2c3e50;
+}
+
+/* Title styles */
+h1, h2, h3 {
+    color: #2c3e50;   /* dark blue-gray */
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* KPI (metric) box styling */
+[data-testid="stMetric"] {
+    background: #ffffff;   /* white card */
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* KPI labels */
+[data-testid="stMetricLabel"] {
+    color: #555;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* KPI values */
+[data-testid="stMetricValue"] {
+    color: #1976d2;   /* blue highlight */
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Section dividers */
+hr {
+    border: 0;
+    height: 1px;
+    background: #dfe6e9;
+    margin: 20px 0;
+}
+
+/* DataFrame styling */
+.stDataFrame {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* DataFrame header */
+.stDataFrame th {
+    background-color: #1976d2 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    text-align: center !important;
+}
+
+/* DataFrame cells */
+.stDataFrame td {
+    font-size: 14px;
+    padding: 6px;
+}
+
+/* Buttons */
+.stButton>button {
+    background-color: #1976d2;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.stButton>button:hover {
+    background-color: #1565c0;
+    cursor: pointer;
+}
