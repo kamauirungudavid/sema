@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from google.cloud import bigquery
 import pandas as pd
-
+from style  import load_css
 # Load credentials
 from google.oauth2 import service_account
 
@@ -21,12 +21,7 @@ st.set_page_config(page_title="Access Control Demo", layout="wide")
 
 ####### APP STYLE #########
 # Load CSS function
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-st.set_page_config(page_title="SEMA NATURALS", page_icon="🌟", layout="wide")
-local_css("style.css")
+load_css()
 
 col_logo, col_title = st.columns([1,4])
 # with col_logo:

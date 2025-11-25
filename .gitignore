@@ -211,3 +211,9 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+
+## excel, csv files
+*.xlsx
+*.csv
+*.xls
+
