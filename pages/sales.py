@@ -19,16 +19,16 @@ client = bigquery.Client(credentials=credentials, project=st.secrets["gcp_servic
 
 #target table:
 dataset_id = "SEMA_NATURALS_DB"
-table_id = "sales_records"
+table_id = "sales_records2"
 table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
 
 # ============================= CONFIG =============================
 with open('data/config_files/product_config.json', "r") as f:
-    PRODUCT_DB = json.load(f)  
+    PRODUCT_DB = json.load(f)
 
 with open('data/config_files/whole_sale_prices.json', "r") as f:
-    WHOLESALE_PRICES = json.load(f)  
+    WHOLESALE_PRICES = json.load(f)
 
 DEFAULT_ROW = {
     "product_name": "Select...",
@@ -46,7 +46,7 @@ DEFAULT_CUSTOMER = {
     "delivery_mode": "Pickup", 
     "delivery_destination": "",
     "payment_mode": "MPESA", 
-    "invoice_number": "", 
+    "email": "", 
     "sales_date": dt.now().date()
 }
 
@@ -116,21 +116,27 @@ with st.expander("Customer Information", expanded=True):
             key=f"delivery_mode_{form_key}"
         )
         st.session_state.customer["delivery_destination"] = st.text_input(
-            "Delivery Destination (if applicable)", 
+            "Delivery Means (if applicable)", 
             value=st.session_state.customer["delivery_destination"],
             key=f"delivery_dest_{form_key}"
+        )
+        st.session_state.customer["delivery_fee"] = st.number_input(
+            "Delivery Fee", 
+           value=st.session_state.customer["delivery_fee"] if "delivery_fee" in st.session_state.customer else 0,
+            key=f"delivery_fee_{form_key}"
+        )
+        
+    with col3:
+        st.session_state.customer["email"] = st.text_input(
+            "Customer Email (optional)", 
+            value=st.session_state.customer["email"],
+            key=f"cust_email_{form_key}"
         )
         st.session_state.customer["payment_mode"] = st.selectbox(
             "Payment Mode", 
             ["MPESA", "CASH", "BANK DEPOSIT"],
             index=["MPESA", "CASH", "BANK DEPOSIT"].index(st.session_state.customer["payment_mode"]),
             key=f"payment_mode_{form_key}"
-        )
-    with col3:
-        st.session_state.customer["invoice_number"] = st.text_input(
-            "Invoice Number (optional)", 
-            value=st.session_state.customer["invoice_number"],
-            key=f"invoice_{form_key}"
         )
         st.session_state.customer["sales_date"] = st.date_input(
             "Sales Date", 
@@ -288,7 +294,7 @@ with st.form(key=f"final_save_form_{form_key}"):
                 "delivery_mode": st.session_state.customer["delivery_mode"],
                 "delivery_destination": st.session_state.customer["delivery_destination"],
                 "payment_mode": st.session_state.customer["payment_mode"],
-                "invoice_number": st.session_state.customer["invoice_number"],
+                "invoice_number": st.session_state.customer["email"],
                 "sales_date": st.session_state.customer["sales_date"],
                 "overall_discount": discount,
                 "items": [
@@ -303,7 +309,9 @@ with st.form(key=f"final_save_form_{form_key}"):
                     if r["product_name"] != "Select..."
                 ],
                 "grand_total": grand_total,
-                "undiscounted_total": undiscounted_price
+                "undiscounted_total": undiscounted_price,
+                "delivery_fee": st.session_state.customer.get("delivery_fee", 0)
+
             }
 
             # SAVE (example: to Excel or BigQuery)
@@ -314,7 +322,7 @@ with st.form(key=f"final_save_form_{form_key}"):
                 df['items'] = df['items'].apply(lambda x: json.dumps(x))
 
                 # ---- Load job (instead of streaming insert) ----
-                table_id = f"{client.project}.SEMA_NATURALS_DB.sales_records3"
+                table_id = f"{client.project}.SEMA_NATURALS_DB.sales_records2"
 
                 job_config = bigquery.LoadJobConfig(
                     write_disposition="WRITE_APPEND",  # append to table
