@@ -19,7 +19,7 @@ client = bigquery.Client(credentials=credentials, project=st.secrets["gcp_servic
 
 #target table:
 dataset_id = "SEMA_NATURALS_DB"
-table_id = "sales_records2"
+table_id = "sales"
 table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
 
@@ -322,7 +322,7 @@ with st.form(key=f"final_save_form_{form_key}"):
                 df['items'] = df['items'].apply(lambda x: json.dumps(x))
 
                 # ---- Load job (instead of streaming insert) ----
-                table_id = f"{client.project}.SEMA_NATURALS_DB.sales_records2"
+                table_id = f"{client.project}.SEMA_NATURALS_DB.sales"
 
                 job_config = bigquery.LoadJobConfig(
                     write_disposition="WRITE_APPEND",  # append to table
