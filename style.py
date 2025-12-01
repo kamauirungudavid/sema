@@ -7,10 +7,32 @@ def load_css():
     /* ===== EXISTING STYLES FROM YOUR CSS FILE ===== */
     .main, .stApp { background-color: #f4f6f9; padding: 20px; font-family: "Segoe UI", "Arial", sans-serif; color: #2c3e50; }
     h1, h2, h3 { color: #2c3e50; font-weight: 600; margin-bottom: 12px; }
-    [data-testid="stMetric"] { background: #ffffff; padding: 18px 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    [data-testid="stMetric"]:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-    [data-testid="stMetricLabel"] { color: #555; font-weight: 600; font-size: 14px; }
-    [data-testid="stMetricValue"] { color: #1976d2; font-size: 22px; font-weight: bold; }
+    
+    [data-testid="stMetric"] { 
+        background: #ffffff; 
+        padding: 18px 20px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        text-align: center; 
+        transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    }
+    [data-testid="stMetric"]:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12); 
+    }
+
+    /* ===== SMALLER METRIC FONTS ===== */
+    [data-testid="stMetricLabel"] { 
+        color: #555; 
+        font-weight: 600; 
+        font-size: 12px;  /* smaller label font */
+    }
+    [data-testid="stMetricValue"] { 
+        color: #1976d2; 
+        font-size: 18px;  /* smaller value font */
+        font-weight: bold; 
+    }
+
     hr { border: 0; height: 1px; background: #dfe6e9; margin: 20px 0; }
     .stDataFrame { background-color: #ffffff; border-radius: 10px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .stDataFrame th { background-color: #1976d2 !important; color: #fff !important; font-weight: bold !important; text-align: center !important; }
@@ -41,4 +63,3 @@ def load_css():
     header[data-testid="stHeader"] * { color: white !important; font-weight: bold !important; }
     </style>
     """, unsafe_allow_html=True)
-

@@ -302,6 +302,7 @@ with st.form(key=f"final_save_form_{form_key}"):
                         "product": r["product_name"],
                         "type": r["purchase_type"],
                         "quantity": r["quantity"],
+                        "wholesale_quantity_type": r.get("quantity_type"),
                         "unit_price": r["price_per_unit"],
                         "line_total": r["price"]
                     }
