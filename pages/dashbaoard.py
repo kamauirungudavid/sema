@@ -90,10 +90,10 @@ with st.spinner("Loading Sales Dashboard..."):
     col1,col2,col3,col4,col5 = st.columns(5)
     with st.spinner("Fetching Sales Data..."):
         sales_df = get_sales(start_date, end_date)
-        total_undisc_sale = sales_df['undiscounted_total'].sum()
-        total_disc_sale = sales_df['discounted_total'].sum()
-        total_disc_offered = sales_df['overall_discount'].sum()
-        delivery_charges = sales_df['delivery_fee'].sum()
+        total_undisc_sale = sales_df['undiscounted_total'].mean()
+        total_disc_sale = sales_df['discounted_total'].mean()
+        total_disc_offered = sales_df['overall_discount'].mean()
+        delivery_charges = sales_df['delivery_fee'].mean()
 
     with col1:
         st.metric("Total Undiscounted Sales", f"Kes: {total_undisc_sale:,.0f}") 
@@ -138,5 +138,8 @@ with st.spinner("Loading Sales Dashboard..."):
 
     with tab2:
         st.write("Items Sold Data")
-        st.dataframe(sales_df)
+        st.dataframe(sales_df.drop(columns=['overall_discount','delivery_fee','discounted_total','undiscounted_total']).style.format({
+            'line_total': 'KES {:,.2f}',
+            'quantity': '{:,.0f}'
+        }))
         
