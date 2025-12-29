@@ -1,3 +1,4 @@
+from unicodedata import name
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import streamlit as st
@@ -257,6 +258,44 @@ with add_product:
                 # st.write(ex_df)
                 load_job = client.load_table_from_dataframe(df, table_id, job_config=job_config)
                 load_job.result()
+                
+                #update config_file:
+                #fetch from bq:
+                def fetch_product_names():
+                    """Fetch distinct product names for dropdown"""
+                    query = f"""
+                        SELECT *
+                        FROM `dbt-demos-392016.SEMA_NATURALS_DB.products`
+                        QUALIFY ROW_NUMBER() OVER (
+                            PARTITION BY lower(product_name)
+                            ORDER BY updated_at DESC
+                        ) = 1
+                    """
+                    df = client.query(query).to_dataframe()
+                    return df
+                ex_df = fetch_product_names()
+                retail_config = {prod_name: price for prod_name, price in zip(ex_df['product_name'], ex_df['retail_price_ksh'])}
+                json.dump(retail_config, open('data/config_files/retail_config_file.json', 'w'))
+                
+                
+                
+                wholesale_options_config = {}
+                for prod_name, raw in zip(ex_df["product_name"], ex_df["wholesale_options"]):
+                    if not raw:
+                        wholesale_options_config[prod_name] = {}
+                        continue
+
+                    rows = json.loads(raw) if isinstance(raw, str) else raw
+
+                    wholesale_options_config[prod_name] = {
+                        row["unit"]: row["price"]
+                        for row in rows
+                        if row.get("unit") and row.get("price") is not None
+                    }
+
+                # Save to file
+                with open("data/config_files/wholesale_options_config_file.json", "w") as f:
+                    json.dump(wholesale_options_config, f, indent=2)
                 
                 st.success("PRODUCT SAVED SUCCESSFULLY!")
                 st.balloons()
@@ -537,6 +576,23 @@ if save_button:
             # st.write(ex_df)
             load_job = client.load_table_from_dataframe(df_, table_id, job_config=job_config)
             load_job.result()
+
+            #fetch from bq:
+            def fetch_product_names():
+                """Fetch distinct product names for dropdown"""
+                query = f"""
+                    SELECT *
+                        FROM `dbt-demos-392016.SEMA_NATURALS_DB.products`
+                        QUALIFY ROW_NUMBER() OVER (
+                            PARTITION BY lower(product_name)
+                            ORDER BY updated_at DESC
+                        ) = 1
+                """
+                df = client.query(query).to_dataframe()
+                return df
+            ex_df = fetch_product_names()
+            retail_config = {prod_name: price for prod_name, price in zip(ex_df['product_name'], ex_df['retail_price_ksh'])}
+            json.dump(retail_config, open('data/config_files/retail_config_file.json', 'w'))
             
             st.success("PRODUCT SAVED SUCCESSFULLY!")
             st.balloons()

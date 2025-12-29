@@ -24,10 +24,10 @@ table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
 
 # ============================= CONFIG =============================
-with open('data/config_files/product_config.json', "r") as f:
+with open('data/config_files/retail_config_file.json', "r") as f:
     PRODUCT_DB = json.load(f)
 
-with open('data/config_files/whole_sale_prices.json', "r") as f:
+with open('data/config_files/wholesale_options_config_file.json', "r") as f:
     WHOLESALE_PRICES = json.load(f)
 
 DEFAULT_ROW = {
@@ -207,15 +207,15 @@ for i, row in enumerate(st.session_state.sales_rows):
     total_price = 0
     wholesale_pr = 0
     if selected != "Select..." and selected in PRODUCT_DB:
-        prices = PRODUCT_DB[selected][0]
+        prices = PRODUCT_DB[selected]
         if st.session_state.sales_rows[i]["purchase_type"] == "Retail":
-            total_price = prices[0] * st.session_state.sales_rows[i]["quantity"]
+            total_price = prices * st.session_state.sales_rows[i]["quantity"]
         elif st.session_state.sales_rows[i]["purchase_type"] == "Wholesale":
             qty_types = WHOLESALE_PRICES.get(selected, {})
             wholesale_pr = qty_types.get(st.session_state.sales_rows[i]["quantity_type"], 0)
             total_price = wholesale_pr * qty
 
-        retail_pr = prices[0] if not math.isnan(prices[0]) else 0
+        retail_pr = prices if not math.isnan(prices) else 0
         price_per_unit = retail_pr if ptype == "Retail" else wholesale_pr
         st.session_state.sales_rows[i]["price_per_unit"] = price_per_unit
 
