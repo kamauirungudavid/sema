@@ -83,7 +83,7 @@ with st.spinner("Loading Sales Dashboard..."):
     st.write("#### Sales Dashboard")
     col1, col2, col3 = st.columns(3)
     with col1:
-        start_date = st.date_input("Start date", dt.now().replace(day=7))
+        start_date = st.date_input("Start date", "2025-11-01")
     with col2:
         end_date = st.date_input("End date", dt.now())
     with col3:
