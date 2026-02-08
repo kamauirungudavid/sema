@@ -110,7 +110,7 @@ with st.spinner("Loading Sales Dashboard..."):
         total_undisc_sale = sales_df['line_total'].sum()
         total_disc_sale = sales_df['line_total'].sum() - sales_df['overall_discount'].mean()
         total_disc_offered = sales_df['overall_discount'].mean()
-        delivery_charges = sales_df['delivery_fee'].mean()
+        delivery_charges = sales_df.groupby(['customer_name','sales_date'])['delivery_fee'].mean()
 
     with col1:
         st.metric("Total Undiscounted Sales", f"Kes: {total_undisc_sale:,.0f}") 
