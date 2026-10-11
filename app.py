@@ -1,9 +1,4 @@
 
-####
-
-THE APP WAS DEACTIVATED DUE TO SECURITY REASONS. PLEASE CONTACT THE DEVELOPER FOR MORE INFORMATION.
-
-###
 import pandas as pd
 import streamlit as st
 from google.cloud import bigquery
